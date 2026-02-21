@@ -18,7 +18,7 @@ if(!isset($_SESSION['login'])){
 <div class="sidebar">
     <h3>Menu</h3>
     <a href="dashboard.php">Dashboard</a>
-    <a href="seminar.php">Data Seminar</a>
+    <a href="seminar.php">Data Seminar Baru</a>
     <a href="narasumber.php">Narasumber</a>
     <a href="peserta.php">Peserta</a>
     <a href="pendaftaran.php">Pendaftaran</a>
