@@ -30,7 +30,7 @@ if(!isset($_SESSION['login'])){
     <p>Selamat datang Admin</p>
 
     <div class="card">
-        <h3>Total Seminar: 3</h3>
+        <h3>Jumlah Seminar 3</h3>
     </div>
     <div class="card">
         <h3>Total Peserta: 25</h3>
