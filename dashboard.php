@@ -19,7 +19,7 @@ if(!isset($_SESSION['login'])){
     <h3>Menu</h3>
     <a href="dashboard.php">Dashboard</a>
     <a href="seminar.php">Data Seminar Baru</a>
-    <a href="narasumber.php">Narasumber</a>
+    <a href="narasumber.php">Narasumber Ganteng</a>
     <a href="peserta.php">Peserta</a>
     <a href="pendaftaran.php">Pendaftaran</a>
     <a href="logout.php">Logout</a>
