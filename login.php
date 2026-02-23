@@ -6,7 +6,7 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $query = mysqli_query($conn, "SELECT * FROM users WHERE email='$email' AND role='peserta'");
+    $query = mysqli_query($conn, "SELECT * FROM users WHERE email= '$email'");
     $data = mysqli_fetch_assoc($query);
 
     if ($data && $password == $data['password']) {
@@ -14,8 +14,15 @@ if (isset($_POST['login'])) {
         $_SESSION['nama'] = $data['nama'];
         $_SESSION['role'] = $data['role'];
 
+    if ($data['role'] == 'eo') {
+            header("Location: dashboardeo.php");
+        } elseif ($data['role'] == 'peserta') {
         header("Location: dashboardpeserta.php");
-        exit;
+        } elseif ($data['role'] == 'narasumber') {
+            header("Location: dashboardnarasumber.php");
+        } elseif ($data['role'] == 'klien') {
+            header("Location: dashboarklien.php");
+        }
     } else {
         $error = "Email atau password salah!";
     }

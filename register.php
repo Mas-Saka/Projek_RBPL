@@ -8,12 +8,37 @@ if (isset($_POST['register'])) {
     $password = ($_POST['password']);
     $no_hp = $_POST['no_hp'];
 
-    mysqli_query($conn, "INSERT INTO users 
-    (nama,email,password,role,no_hp) 
-    VALUES 
-    ('$nama','$email','$password','peserta','$no_hp')");
 
-    header("Location: login.php");
+    $panjang = strlen($password);
+    $hurufkecil = false;
+    $hurufbesar = false;
+    $angka = false;
+
+    for ($i = 0; $i < $panjang; $i++) {
+        $karakter  = $password[$i];
+        if ($karakter >= 'a' && $karakter <= 'z') {
+            $hurufkecil = true;
+        } elseif ($karakter >= 'A' && $karakter <= 'Z') {
+            $hurufbesar = true;
+        } elseif ($karakter >= '0' && $karakter <= '9') {
+            $angka = true;
+        }
+    }
+  if($panjang < 8) {
+    $error = "Password harus minimal 8 karakter!";
+  } elseif (!$hurufbesar) {
+    $error = "Password harus mengandung huruf besar!";
+  } elseif (!$angka) {
+    $error = "Password harus mengandung angka!";
+  } else {
+    $insert = mysqli_query($conn, "INSERT INTO users (nama, email, password, no_hp, role) VALUES ('$nama', '$email', '$password', '$no_hp', 'peserta')");
+    if ($insert) {
+        header("Location: login.php");
+        exit;
+    } else {
+        $error = "Gagal mendaftar. Silakan coba lagi.";
+    }
+  }
 }
 ?>
 
@@ -27,7 +52,7 @@ if (isset($_POST['register'])) {
 
 <div class="login-box">
     <h2>Register Peserta</h2>
-
+    <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
     <form method="POST">
         <input type="text" name="nama" placeholder="Nama Lengkap" required><br><br>
         <input type="email" name="email" placeholder="Email" required><br><br>
