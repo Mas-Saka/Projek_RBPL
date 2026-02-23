@@ -31,14 +31,19 @@ if (isset($_POST['register'])) {
   } elseif (!$angka) {
     $error = "Password harus mengandung angka!";
   } else {
+    //cek email sudah terdaftar atau belum
+    $cek_email = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
+    if (mysqli_num_rows($cek_email) > 0) {
+        $error = "Email sudah terdaftar gunakan email lain!";
+    } else {
     $insert = mysqli_query($conn, "INSERT INTO users (nama, email, password, no_hp, role) VALUES ('$nama', '$email', '$password', '$no_hp', 'peserta')");
     if ($insert) {
-        header("Location: login.php");
-        exit;
+        $success = "Pendaftaran berhasil! Silakan <a href='login.php'>login</a>.";
     } else {
         $error = "Gagal mendaftar. Silakan coba lagi.";
     }
   }
+}
 }
 ?>
 
@@ -60,6 +65,8 @@ if (isset($_POST['register'])) {
         <input type="text" name="no_hp" placeholder="No HP" required><br><br>
         <button type="submit" name="register">Daftar</button>
     </form>
+    <?php if(isset($success)) echo "<p style='color:green;'>$success</p>"; ?>
+    <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
 </div>
 
 </body>
