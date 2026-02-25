@@ -10,7 +10,7 @@ if (isset($_POST['login'])) {
     $data = mysqli_fetch_assoc($query);
 
     if ($data && $password == $data['password']) {
-        $_SESSION['id'] = $data['id'];
+        $_SESSION['id'] = $data['id'];  
         $_SESSION['nama'] = $data['nama'];
         $_SESSION['role'] = $data['role'];
 
@@ -21,7 +21,7 @@ if (isset($_POST['login'])) {
         } elseif ($data['role'] == 'narasumber') {
             header("Location: dashboardnarasumber.php");
         } elseif ($data['role'] == 'klien') {
-            header("Location: dashboarklien.php");
+            header("Location: dashboardklien.php");
         }
     } else {
         $error = "Email atau password salah!";

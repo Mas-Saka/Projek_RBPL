@@ -13,12 +13,7 @@ $peserta_id = $_SESSION['id'];
 $seminar = mysqli_query($conn, "SELECT * FROM seminar WHERE status='aktif'");
 
 // Ambil pendaftaran peserta
-$pendaftaran = mysqli_query($conn, "
-    SELECT seminar.judul, pendaftaran.status, pendaftaran.kehadiran
-    FROM pendaftaran
-    JOIN seminar ON pendaftaran.seminar_id = seminar.id
-    WHERE pendaftaran.peserta_id = $peserta_id
-");
+$pendaftaran = mysqli_query($conn, " SELECT seminar.judul_seminar, pendaftaran.status, pendaftaran.kehadiran FROM pendaftaran JOIN seminar ON pendaftaran.seminar_id = seminar.seminar_id WHERE pendaftaran.peserta_id = $peserta_id");
 ?>
 
 <!DOCTYPE html>
