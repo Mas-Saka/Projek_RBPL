@@ -21,6 +21,7 @@ $data = mysqli_fetch_assoc($query);
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Detail Kontrak</title>
     <style>
@@ -39,7 +40,7 @@ $data = mysqli_fetch_assoc($query);
             background: white;
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         h2 {
@@ -63,86 +64,110 @@ $data = mysqli_fetch_assoc($query);
             line-height: 1.7;
         }
 
-       .status {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
+        .status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
 
-.menunggu { background: #f39c12; color: white; }
-.disetujui { background: #27ae60; color: white; }
-.ditolak { background: #e74c3c; color: white; }
+        .menunggu {
+            background: #f39c12;
+            color: white;
+        }
 
-.section {
-    margin-bottom: 12px;
-    font-size: 14px;
-}
+        .disetujui {
+            background: #27ae60;
+            color: white;
+        }
 
-.label {
-    font-weight: bold;
-    color: #2a5298;
-}
+        .ditolak {
+            background: #e74c3c;
+            color: white;
+        }
 
-.section p {
-    background: #f4f6f9;
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 6px;
-}
+        .section {
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
 
-.actions {
-    margin-top: 15px;
-}
+        .label {
+            font-weight: bold;
+            color: #2a5298;
+        }
 
-.btn {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-right: 10px;
-    transition: 0.3s;
-}
+        .section p {
+            background: #f4f6f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 6px;
+        }
 
-.approve { background: #27ae60; color: white; }
-.reject { background: #e74c3c; color: white; }
+        .actions {
+            margin-top: 15px;
+        }
 
-.approve:hover { background: #219150; }
-.reject:hover { background: #c0392b; }
+        .btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+            transition: 0.3s;
+        }
+
+        .approve {
+            background: #27ae60;
+            color: white;
+        }
+
+        .reject {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .approve:hover {
+            background: #219150;
+        }
+
+        .reject:hover {
+            background: #c0392b;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <a href="datakontrak.php" class="back-btn">← Kembali</a>
+        <a href="datakontrak.php" class="back-btn">← Kembali</a>
 
-    <div class="box">
-        <h2><?= $data['nomor_kontrak']; ?></h2>
+        <div class="box">
+            <h2><?= $data['nomor_kontrak']; ?></h2>
 
-        <div class="section">
-            <span class="label">EO:</span> <?= $data['nama_eo']; ?>
-        </div>
-
-        <div class="section">
-            <span class="label">Periode:</span>
-            <?= $data['tanggal_mulai']; ?> - <?= $data['tanggal_selesai']; ?>
-        </div>
-
-        <div class="section">
-            <span class="label">Nilai Kontrak:</span>
-            Rp <?= number_format($data['nilai_kontrak'],0,',','.'); ?>
-        </div>
-
-        <div class="section">
-            <span class="label">Isi Kontrak:</span>
-            <div class="isi">
-                <?= nl2br($data['isi_kontrak']); ?>
+            <div class="section">
+                <span class="label">EO:</span> <?= $data['nama_eo']; ?>
             </div>
-        </div>
-        <?php if($data['status_kontrak'] == 'menunggu') { ?>
+
+            <div class="section">
+                <span class="label">Periode:</span>
+                <?= $data['tanggal_mulai']; ?> - <?= $data['tanggal_selesai']; ?>
+            </div>
+
+            <div class="section">
+                <span class="label">Nilai Kontrak:</span>
+                Rp <?= number_format($data['nilai_kontrak'], 0, ',', '.'); ?>
+            </div>
+
+            <div class="section">
+                <span class="label">Isi Kontrak:</span>
+                <div class="isi">
+                    <?= nl2br($data['isi_kontrak']); ?>
+                </div>
+            </div>
+            <?php if ($data['status_kontrak'] == 'menunggu') { ?>
                 <div class="actions">
                     <form method="POST" action="update_kontrak.php">
                         <input type="hidden" name="kontrak_id" value="<?= $data['kontrak_id']; ?>">
@@ -151,11 +176,10 @@ $data = mysqli_fetch_assoc($query);
                     </form>
                 </div>
             <?php } ?>
+        </div>
+
     </div>
 
-</div>
- 
 </body>
+
 </html>
-
-

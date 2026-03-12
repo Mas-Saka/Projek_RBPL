@@ -57,6 +57,7 @@ if (isset($_POST['register'])) {
 
 <div class="login-box">
     <h2>Register Peserta</h2>
+    <?php if(isset($success)) echo "<p style='color:green;'>$success</p>"; ?>
     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
     <form method="POST">
         <input type="text" name="nama" placeholder="Nama Lengkap" required><br><br>
@@ -65,7 +66,6 @@ if (isset($_POST['register'])) {
         <input type="text" name="no_hp" placeholder="No HP" required><br><br>
         <button type="submit" name="register">Daftar</button>
     </form>
-    <?php if(isset($success)) echo "<p style='color:green;'>$success</p>"; ?>
     <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
 </div>
 
