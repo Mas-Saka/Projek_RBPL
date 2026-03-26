@@ -10,25 +10,31 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] != 'eo') {
 $eo_id = $_SESSION['id'];
 
 // Statistik
-$total_seminar = mysqli_fetch_assoc(mysqli_query($conn,
+$total_seminar = mysqli_fetch_assoc(mysqli_query(
+    $conn,
     "SELECT COUNT(*) as total FROM seminar WHERE eo_id=$eo_id"
 ))['total'];
 
-$seminar_aktif = mysqli_fetch_assoc(mysqli_query($conn,
+$seminar_aktif = mysqli_fetch_assoc(mysqli_query(
+    $conn,
     "SELECT COUNT(*) as total FROM seminar WHERE eo_id=$eo_id AND status='aktif'"
 ))['total'];
 
-$total_peserta = mysqli_fetch_assoc(mysqli_query($conn,
+$total_peserta = mysqli_fetch_assoc(mysqli_query(
+    $conn,
     "SELECT COUNT(*) as total FROM pendaftaran 
      JOIN seminar ON pendaftaran.seminar_id= seminar.seminar_id
      WHERE seminar.eo_id=$eo_id"
 ))['total'];
 
-$total_feedback = mysqli_fetch_assoc(mysqli_query($conn,
+$total_feedback = mysqli_fetch_assoc(mysqli_query(
+    $conn,
     "SELECT COUNT(*) as total FROM feedback 
      JOIN seminar ON feedback.seminar_id=seminar.seminar_id
      WHERE seminar.eo_id=$eo_id"
 ))['total'];
+
+$seminar_list = mysqli_query($conn, "SELECT seminar_id, judul_seminar, tanggal, jam_mulai, kuota, status FROM seminar WHERE eo_id=$eo_id ORDER BY seminar_id DESC");
 
 $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE id=$eo_id"))['nama'];
 ?>
@@ -36,6 +42,7 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Dashboard EO</title>
     <link rel="stylesheet" href="style.css">
@@ -95,7 +102,7 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
             background: white;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
@@ -125,65 +132,119 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
         button:hover {
             background: #163d7a;
         }
+
+        .btn-detail {
+            background: #2a5298;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-detail:hover {
+            background: #163d7a;
+            transform: scale(1.05);
+        }
     </style>
 </head>
+
 <body>
 
-<div class="sidebar" id="sidebar">
-    <h2 style = "margin-bottom: 12px; ">Selamat Datang</h2>
-    <div class ="box"style="background: #611c07; padding: 10px; border-radius: 30px; margin-bottom: 10px;">   
-    <h3 style="color:white; font-size: 14px;margin: 2px;"><?= $nama_eo." -- Event Organizer"?></h3>
-    </div>
-    <a href="#">Dashboard</a>
-    <a href="seminar.php">Kelola Seminar</a>
-    <a href="buat_kontrak.php">Buat Kontrak</a>
-    <a href="#">Undang Narasumber</a>
-    <a href="">Data Peserta</a>
-    <a href="#">Laporan</a>
-    <a href="logout.php">Logout</a>
-</div>
-
-<div class="main" id="main">
-    <div class="topbar">
-        <div class="burger" onclick="toggleMenu()">☰</div>
-        <div>Dashboard EO - Sistem Manajemen Seminar</div>
+    <div class="sidebar" id="sidebar">
+        <h2 style="margin-bottom: 12px; ">Selamat Datang</h2>
+        <div class="box" style="background: #611c07; padding: 10px; border-radius: 30px; margin-bottom: 10px;">
+            <h3 style="color:white; font-size: 14px;margin: 2px;"><?= $nama_eo . " -- Event Organizer" ?></h3>
+        </div>
+        <a href="#">Dashboard</a>
+        <a href="seminar.php">Kelola Seminar</a>
+        <a href="buat_kontrak.php">Buat Kontrak</a>
+        <a href="#">Undang Narasumber</a>
+        <a href="">Data Peserta</a>
+        <a href="#">Laporan</a>
+        <a href="logout.php">Logout</a>
     </div>
 
-    <h2>Statistik Seminar Anda</h2>
+    <div class="main" id="main">
+        <div class="topbar">
+            <div class="burger" onclick="toggleMenu()">☰</div>
+            <div>Dashboard EO - Sistem Manajemen Seminar</div>
+        </div>
 
-    <div class="stats">
-        <div class="card">
-            <h3><?= $total_seminar ?></h3>
-            <p>Total Seminar</p>
+        <h2>Statistik Seminar Anda</h2>
+
+        <div class="stats">
+            <div class="card">
+                <h3><?= $total_seminar ?></h3>
+                <p>Total Seminar</p>
+            </div>
+            <div class="card">
+                <h3><?= $seminar_aktif ?></h3>
+                <p>Seminar Aktif</p>
+            </div>
+            <div class="card">
+                <h3><?= $total_peserta ?></h3>
+                <p>Total Peserta</p>
+            </div>
+            <div class="card">
+                <h3><?= $total_feedback ?></h3>
+                <p>Total Feedback</p>
+            </div>
         </div>
+
         <div class="card">
-            <h3><?= $seminar_aktif ?></h3>
-            <p>Seminar Aktif</p>
-        </div>
-        <div class="card">
-            <h3><?= $total_peserta ?></h3>
-            <p>Total Peserta</p>
-        </div>
-        <div class="card">
-            <h3><?= $total_feedback ?></h3>
-            <p>Total Feedback</p>
+            <h3>Kelola Seminar</h3>
+            <p>Daftar seminar yang telah Anda buat.</p>
+
+            <table style="width:100%; border-collapse: collapse; margin-top:15px;">
+                <tr style="background:#f0f0f0;">
+                    <th style="padding:10px;">Judul</th>
+                    <th>Tanggal</th>
+                    <th>Jam</th>
+                    <th>Kuota</th>
+                    <th>Status</th>
+                    <th style="text-align: center;">Aksi</th>
+                </tr>
+
+                <?php while ($s = mysqli_fetch_assoc($seminar_list)) { ?>
+                    <tr style="border-bottom:1px solid #ddd;">
+                        <td style="max-width:250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"title="<?= $s['judul_seminar']; ?>">
+                            <?= $s['judul_seminar']; ?> 
+                        <td><?= $s['tanggal']; ?></td>
+                        <td><?= $s['jam_mulai']; ?></td>
+                        <td><?= $s['kuota']; ?></td>
+
+                        <td>
+                            <?php if ($s['status'] == 'aktif') { ?>
+                                <span style="color:green; font-weight:bold;">Aktif</span>
+                            <?php } else { ?>
+                                <span style="color:orange; font-weight:bold;">Draft</span>
+                            <?php } ?>
+                        </td>
+                        <td>
+                            <div style="display:flex; justify-content:center;">
+                                <a href="detail_seminar.php?id=<?= $s['seminar_id']; ?>">
+                                    <button class="btn-detail">Detail</button>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+            <br>
+            <a href="seminar.php">
+                <button>+ Tambah Seminar</button>
+            </a>
         </div>
     </div>
-
-    <div class="card">
-        <h3>Kelola Seminar</h3>
-        <p>Buat, edit, dan atur jadwal seminar sesuai kontrak.</p>
-        <a href="seminar.php"><button>Masuk ke Manajemen Seminar</button></a>
-    </div>
-
-</div>
-
-<script>
-function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("hide");
-    document.getElementById("main").classList.toggle("full");
-}
-</script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("sidebar").classList.toggle("hide");
+            document.getElementById("main").classList.toggle("full");
+        }
+    </script>
 
 </body>
+
 </html>

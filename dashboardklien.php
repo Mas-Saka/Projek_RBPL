@@ -18,7 +18,8 @@ $kontrak = mysqli_query($conn, "
 // Hitung statistik
 $total_kontrak = mysqli_num_rows($kontrak);
 
-$kontrak_disetujui = mysqli_fetch_assoc(mysqli_query($conn,
+$kontrak_disetujui = mysqli_fetch_assoc(mysqli_query(
+    $conn,
     "SELECT COUNT(*) as total FROM kontrak 
      WHERE klien_id=$klien_id AND status_kontrak='disetujui'"
 ))['total'];
@@ -26,6 +27,7 @@ $kontrak_disetujui = mysqli_fetch_assoc(mysqli_query($conn,
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Dashboard Klien</title>
     <link rel="stylesheet" href="style.css">
@@ -102,7 +104,7 @@ $kontrak_disetujui = mysqli_fetch_assoc(mysqli_query($conn,
             background: white;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
             margin-bottom: 20px;
         }
 
@@ -119,7 +121,8 @@ $kontrak_disetujui = mysqli_fetch_assoc(mysqli_query($conn,
             background: white;
         }
 
-        table th, table td {
+        table th,
+        table td {
             padding: 10px;
             border: 1px solid #ddd;
             text-align: center;
@@ -131,69 +134,71 @@ $kontrak_disetujui = mysqli_fetch_assoc(mysqli_query($conn,
         }
     </style>
 </head>
+
 <body>
 
-<div class="sidebar" id="sidebar">
-    <h3>Klien Panel</h3>
-    <a href="#">Dashboard</a>
-    <a href="datakontrak.php">Data Kontrak</a>
-    <a href="#">Status Seminar</a>
-    <a href="#">Laporan Akhir</a>
-    <a href="logout.php">Logout</a>
-</div>
-
-<div class="main" id="main">
-
-    <div class="topbar">
-        <div class="burger" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        Dashboard Klien - Sistem Manajemen Seminar
+    <div class="sidebar" id="sidebar">
+        <h3>Klien Panel</h3>
+        <a href="#">Dashboard</a>
+        <a href="datakontrak.php">Data Kontrak</a>
+        <a href="#">Status Seminar</a>
+        <a href="#">Laporan Akhir</a>
+        <a href="logout.php">Logout</a>
     </div>
 
-    <h2 style="color:white;">Ringkasan Kontrak</h2>
+    <div class="main" id="main">
 
-    <div class="stats">
+        <div class="topbar">
+            <div class="burger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            Dashboard Klien - Sistem Manajemen Seminar
+        </div>
+
+        <h2 style="color:white;">Ringkasan Kontrak</h2>
+
+        <div class="stats">
+            <div class="card">
+                <h3><?= $total_kontrak ?></h3>
+                <p>Total Kontrak</p>
+            </div>
+            <div class="card">
+                <h3><?= $kontrak_disetujui ?></h3>
+                <p>Kontrak Disetujui</p>
+            </div>
+        </div>
+
         <div class="card">
-            <h3><?= $total_kontrak ?></h3>
-            <p>Total Kontrak</p>
+            <h3>Daftar Kontrak</h3>
+
+            <table>
+                <tr>
+                    <th>Nomor Kontrak</th>
+                    <th>Tanggal Mulai</th>
+                    <th>Status</th>
+                </tr>
+
+                <?php while ($k = mysqli_fetch_assoc($kontrak)): ?>
+                    <tr>
+                        <td><?= $k['nomor_kontrak']; ?></td>
+                        <td><?= $k['tanggal_mulai']; ?></td>
+                        <td><?= $k['status_kontrak']; ?></td>
+                    </tr>
+                <?php endwhile; ?>
+            </table>
         </div>
-        <div class="card">
-            <h3><?= $kontrak_disetujui ?></h3>
-            <p>Kontrak Disetujui</p>
-        </div>
+
     </div>
 
-    <div class="card">
-        <h3>Daftar Kontrak</h3>
-
-        <table>
-            <tr>
-                <th>Nomor Kontrak</th>
-                <th>Tanggal Mulai</th>
-                <th>Status</th>
-            </tr>
-
-            <?php while($k = mysqli_fetch_assoc($kontrak)): ?>
-            <tr>
-                <td><?= $k['nomor_kontrak']; ?></td>
-                <td><?= $k['tanggal_mulai']; ?></td>
-                <td><?= $k['status_kontrak']; ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </table>
-    </div>
-
-</div>
-
-<script>
-function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("hide");
-    document.getElementById("main").classList.toggle("full");
-}
-</script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("sidebar").classList.toggle("hide");
+            document.getElementById("main").classList.toggle("full");
+        }
+    </script>
 
 </body>
+
 </html>
