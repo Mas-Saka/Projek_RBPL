@@ -2,21 +2,45 @@
 session_start();
 include "config.php";
 
-if (!isset($_SESSION['id']) || $_SESSION['role'] != 'klien') {
+if (!isset($_SESSION['id']) || ($_SESSION['role'] != 'klien' && $_SESSION['role'] != 'eo')) {
     header("Location: login.php");
     exit;
 }
 
-$klien_id = $_SESSION['id'];
 $id = $_GET['id'];
+$user_id = $_SESSION['id'];
+$role = $_SESSION['role'];
 
-$query = mysqli_query($conn, " SELECT kontrak.*, users.nama AS nama_eo
-    FROM kontrak
-    JOIN users ON kontrak.eo_id = users.id
-    WHERE kontrak.kontrak_id = $id AND kontrak.klien_id = $klien_id
+$query = mysqli_query($conn, "
+    SELECT 
+        k.kontrak_id,
+        k.judul_kontrak,
+        k.judul_seminar,
+        k.nomor_kontrak,
+        k.tanggal_mulai,
+        k.tanggal_selesai,
+        k.nilai_kontrak,
+        k.isi_kontrak,
+        k.status_kontrak,
+        k.tanggal_buat,
+        u.nama AS nama_eo
+    FROM kontrak k
+    JOIN users u ON k.eo_id = u.id
+    WHERE 
+        k.kontrak_id = '$id'
+        AND (
+            ('$role' = 'klien' AND k.klien_id = '$user_id')
+            OR
+            ('$role' = 'eo' AND k.eo_id = '$user_id')
+        )
 ");
 
 $data = mysqli_fetch_assoc($query);
+
+if (!$data) {
+    echo "<script>alert('Data tidak ditemukan atau bukan hak akses Anda'); window.location='dashboardeo.php';</script>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -145,22 +169,22 @@ $data = mysqli_fetch_assoc($query);
         <a href="datakontrak.php" class="back-btn">← Kembali</a>
 
         <div class="box">
-            <h2><?= $data['nomor_kontrak']; ?></h2>
-
+            <h2><?= $data['judul_kontrak']; ?></h2>
             <div class="section">
                 <span class="label">EO:</span> <?= $data['nama_eo']; ?>
             </div>
-
+            <div class="section">
+                <span class="label">Nomor Kontrak:</span> 
+                <?= $data['nomor_kontrak']; ?>
+            </div>
             <div class="section">
                 <span class="label">Periode:</span>
                 <?= $data['tanggal_mulai']; ?> - <?= $data['tanggal_selesai']; ?>
             </div>
-
             <div class="section">
                 <span class="label">Nilai Kontrak:</span>
                 Rp <?= number_format($data['nilai_kontrak'], 0, ',', '.'); ?>
             </div>
-
             <div class="section">
                 <span class="label">Isi Kontrak:</span>
                 <div class="isi">
@@ -176,6 +200,15 @@ $data = mysqli_fetch_assoc($query);
                     </form>
                 </div>
             <?php } ?>
+            <?php
+            if ($_SESSION['role'] == 'eo') {
+                $back = "dashboardeo.php";
+            } else {
+                $back = "datakontrak.php"; // halaman klien
+            }
+            ?>
+
+            <a href="<?= $back ?>" class="back-btn">← Kembali</a>
         </div>
 
     </div>

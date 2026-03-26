@@ -3,7 +3,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "seminar_online";
+$db = "seminar_online";
 
 // Koneksi
 $conn = mysqli_connect($host, $user, $pass, $db);

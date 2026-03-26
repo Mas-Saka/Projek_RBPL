@@ -44,6 +44,10 @@ if (isset($_POST['submit'])) {
 
     echo "<script>alert('Seminar berhasil dibuat!'); window.location='seminar.php';</script>";
 }
+
+$nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE id=$eo_id"))['nama'];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -51,60 +55,87 @@ if (isset($_POST['submit'])) {
 
 <head>
     <title>Kelola Seminar</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-       body {
+        body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
-            background: #f4f6f9;
+            background: linear-gradient(135deg, #2a5298);
+            margin: 0;
+        }
+
+        .topbar {
+            background: #1e3c72;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border-radius: 10px 10px;
+        }
+
+        .burger {
+            font-size: 22px;
+            cursor: pointer;
+            margin-right: 15px;
         }
 
         .sidebar {
             position: fixed;
-            width: 220px;
+            left: 0;
+            top: 0;
+            width: 190px;
             height: 100%;
-            background: #1e3c72;
-            color: white;
+            background: #2c3e50;
             padding: 20px;
+            transition: 0.3s;
+        }
+
+        .sidebar.hide {
+            left: -230px;
         }
 
         .sidebar a {
             display: block;
-            margin: 12px 0;
             color: white;
+            margin: 15px 0;
             text-decoration: none;
         }
 
+
         .main {
-            margin-left: 240px;
+            margin-left: 230px;
             padding: 20px;
+            transition: 0.3s;
         }
 
-        .topbar {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        .main.full {
+            margin-left: 0;
         }
+
 
         .card {
-            background: white;
+            margin-top: 30px;
+            background-color: white;
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
 
         /* TABLE */
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 700px;
             table-layout: fixed;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #ddd;
+            /* GARIS SEMUA SISI */
+            text-align: left;
         }
 
         th {
@@ -121,6 +152,15 @@ if (isset($_POST['submit'])) {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            cursor: pointer;
+            word-warp: break-word;  
+        }
+
+        /* SAAT DIBUKA */
+        .judul.open {
+            white-space: normal;
+            overflow: visible;
+            word-break: break-word;
         }
 
         /* BADGE */
@@ -142,7 +182,8 @@ if (isset($_POST['submit'])) {
         }
 
         /* BUTTON */
-        .btn-detail, .btn-edit {
+        .btn-detail,
+        .btn-edit {
             border: none;
             padding: 6px 10px;
             border-radius: 6px;
@@ -171,8 +212,10 @@ if (isset($_POST['submit'])) {
         }
 
         /* FORM */
-        input, select, textarea {
-            width: 100%;
+        input,
+        select,
+        textarea {
+            width: 98%;
             padding: 10px;
             margin-bottom: 12px;
             border-radius: 8px;
@@ -183,6 +226,7 @@ if (isset($_POST['submit'])) {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+
         }
 
         img.preview {
@@ -204,113 +248,126 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-
     <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h2>EO Panel</h2>
+    <div class="sidebar" id="sidebar">
+        <h2 style="margin-bottom: 12px; color : white; font-size: 24px;">Halaman EO</h2>
+        <div class="box" style="background: #611c07; padding: 10px; border-radius: 30px; margin-bottom: 10px;">
+            <h3 style="color:white; font-size: 14px;margin: 2px;"> <?= $nama_eo . " -- Event Organizer" ?></h3>
+        </div>
         <a href="dashboardeo.php">Dashboard</a>
         <a href="seminar.php">Kelola Seminar</a>
         <a href="buat_kontrak.php">Kontrak</a>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php" style="width:30%;color:red; text-decoration:none; padding:8px 12px; border-radius:8px;
+            transition:0.3s;" onmouseover="this.style.background='red'; this.style.color='white';"
+            onmouseout="this.style.background='transparent'; this.style.color='red';"">Logout</a>
     </div>
 
     <!-- MAIN -->
-    <div class="main">
+    <div class=" main" id="main">
+            <div class="topbar">
+                <div class="burger" onclick="toggleMenu()">☰</div>
+                <div>Dashboard EO - Sistem Manajemen Seminar</div>
+            </div>
 
-        <div class="topbar">
-            <h2>Kelola Seminar</h2>
-        </div>
 
-        <!-- LIST SEMINAR -->
-        <div class="card">
-            <h3>Daftar Seminar</h3>
+            <!-- LIST SEMINAR -->
+            <div class="card">
+                <h3>Daftar Seminar</h3>
 
-            <table style="table-layout: fixed;">
-                <tr>
-                    <th style="width: 250px;">Judul</th>
-                    <th>Tanggal</th>
-                    <th>Kuota</th>
-                    <th>Status</th>
-                    <th style="text-align:center;">Aksi</th>
-                </tr>
+                <div>
 
-                <?php while ($s = mysqli_fetch_assoc($seminar)) { ?>
-                    <tr class="row-hover">
+                    <table>
+                        <tr>
+                            <th>No</th>
+                            <th style="width: 250px;">Judul</th>
+                            <th>Tanggal</th>
+                            <th>Kuota</th>
+                            <th>Status</th>
+                            <th style="text-align:center;">Aksi</th>
+                        </tr>
 
-                        <td style="max-width:250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                            title="<?= $s['judul_seminar']; ?>">
-                            <?= $s['judul_seminar']; ?>
-                        </td>
+                        <?php $no = 1;
+                        while ($s = mysqli_fetch_assoc($seminar)) { ?>
+                            <tr class="row-hover">
+                                <td><?= $no++; ?></td>
+                                <td onclick="toggleDetail(this)" class="judul"
+                                    data-full="<?= htmlspecialchars($s['judul_seminar']); ?>">
 
-                        <td><?= $s['tanggal']; ?></td>
-                        <td><?= $s['kuota']; ?></td>
+                                    <?= strlen($s['judul_seminar']) > 30
+                                        ? substr($s['judul_seminar'], 0, 30) . "..."
+                                        : $s['judul_seminar']; ?>
+                                </td>
 
-                        <td>
-                            <?php if ($s['status'] == 'aktif') { ?>
-                                <span class="badge aktif">Aktif</span>
-                            <?php } else { ?>
-                                <span class="badge draft">Draft</span>
-                            <?php } ?>
-                        </td>
+                                <td><?= $s['tanggal']; ?></td>
+                                <td><?= $s['kuota']; ?></td>
 
-                        <td style="text-align:center;">
-                            <a href="detail_seminar.php?id=<?= $s['seminar_id']; ?>">
-                                <button class="btn-detail">Detail</button>
-                            </a>
+                                <td>
+                                    <?php if ($s['status'] == 'aktif') { ?>
+                                        <span class="badge aktif">Aktif</span>
+                                    <?php } else { ?>
+                                        <span class="badge draft">Draft</span>
+                                    <?php } ?>
+                                </td>
 
-                            <a href="edit_seminar.php?id=<?= $s['seminar_id']; ?>">
-                                <button class="btn-edit">Edit</button>
-                            </a>
-                        </td>
+                                <td style="text-align:center;">
+                                    <a href="detail_seminar.php?id=<?= $s['seminar_id']; ?>">
+                                        <button class="btn-detail">Detail</button>
+                                    </a>
 
-                    </tr>
-                <?php } ?>
-            </table>
-        </div>
+                                    <a href="edit_seminar.php?id=<?= $s['seminar_id']; ?>">
+                                        <button class="btn-edit">Edit</button>
+                                    </a>
+                                </td>
 
-        <!-- FORM TAMBAH -->
-        <div class="card">
-            <h3>Tambah Seminar</h3>
-
-            <form method="POST" enctype="multipart/form-data">
-
-                <input type="text" name="judul_seminar" placeholder="Judul Seminar" required>
-                <textarea name="deskripsi" placeholder="Deskripsi"></textarea>
-                <input type="text" name="kategori" placeholder="Kategori">
-
-                <input type="file" name="gambar" onchange="previewImage(event)">
-                <img id="preview" class="preview">
-
-                <div class="row">
-                    <input type="date" name="tanggal">
-                    <input type="number" name="kuota" placeholder="Kuota">
+                            </tr>
+                        <?php } ?>
+                    </table>
                 </div>
+            </div>
 
-                <div class="row">
-                    <input type="time" name="jam_mulai">
-                    <input type="time" name="jam_selesai">
-                </div>
+            <!-- FORM TAMBAH -->
+            <div class="card">
+                <h3>Tambah Seminar</h3>
 
-                <input type="number" name="biaya" placeholder="Biaya">
+                <form method="POST" enctype="multipart/form-data">
 
-                <select name="narasumber_id">
-                    <option>Pilih Narasumber</option>
-                    <?php while ($n = mysqli_fetch_assoc($narasumber)) { ?>
-                        <option value="<?= $n['id']; ?>"><?= $n['nama']; ?></option>
-                    <?php } ?>
-                </select>
+                    <input type="text" name="judul_seminar" placeholder="Judul Seminar" required>
+                    <textarea name="deskripsi" placeholder="Deskripsi"></textarea>
+                    <input type="text" name="kategori" placeholder="Kategori">
 
-                <select name="platform">
-                    <option>Zoom</option>
-                    <option>Google Meet</option>
-                </select>
+                    <input type="file" name="gambar" onchange="previewImage(event)">
+                    <img id="preview" class="preview">
 
-                <input type="text" name="link_meeting" placeholder="Link Meeting">
+                    <div class="row">
+                        <input type="date" name="tanggal">
+                        <input type="number" name="kuota" min="1" step="1" placeholder="Kuota">
+                    </div>
 
-                <button class="btn" name="submit">Simpan</button>
+                    <div class="row">
+                        <input type="time" name="jam_mulai" required>
+                        <input type="time" name="jam_selesai">
+                    </div>
 
-            </form>
-        </div>
+                    <input type="number" name="biaya" min="100" placeholder="Biaya">
+
+                    <select name="narasumber_id">
+                        <option>Pilih Narasumber</option>
+                        <?php while ($n = mysqli_fetch_assoc($narasumber)) { ?>
+                            <option value="<?= $n['id']; ?>"><?= $n['nama']; ?></option>
+                        <?php } ?>
+                    </select>
+
+                    <select name="platform">
+                        <option>Zoom</option>
+                        <option>Google Meet</option>
+                    </select>
+
+                    <input type="text" name="link_meeting" placeholder="Link Meeting">
+
+                    <button class="btn" name="submit">Simpan</button>
+
+                </form>
+            </div>
 
     </div>
 
@@ -324,6 +381,27 @@ if (isset($_POST['submit'])) {
             }
             reader.readAsDataURL(event.target.files[0]);
         }
+
+        function toggleMenu() {
+            document.getElementById("sidebar").classList.toggle("hide");
+            document.getElementById("main").classList.toggle("full");
+
+        }
+
+
+        function toggleDetail(el) {
+            const fullText = el.getAttribute("data-full");
+
+            // cek kalau sudah expanded
+            if (el.classList.contains("open")) {
+                el.innerText = fullText.substring(0, 30) + "...";
+                el.classList.remove("open");
+            } else {
+                el.innerText = fullText;
+                el.classList.add("open");
+            }
+        }
+
     </script>
 
 </body>
