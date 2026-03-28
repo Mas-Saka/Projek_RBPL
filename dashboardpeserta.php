@@ -18,6 +18,7 @@ $pendaftaran = mysqli_query($conn, " SELECT seminar.judul_seminar, pendaftaran.s
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Dashboard Peserta</title>
     <link rel="stylesheet" href="style.css">
@@ -34,7 +35,7 @@ $pendaftaran = mysqli_query($conn, " SELECT seminar.judul_seminar, pendaftaran.s
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .btn {
@@ -57,7 +58,8 @@ $pendaftaran = mysqli_query($conn, " SELECT seminar.judul_seminar, pendaftaran.s
             margin-top: 15px;
         }
 
-        table th, table td {
+        table th,
+        table td {
             padding: 10px;
             border: 1px solid #ddd;
             text-align: center;
@@ -69,58 +71,62 @@ $pendaftaran = mysqli_query($conn, " SELECT seminar.judul_seminar, pendaftaran.s
         }
     </style>
 </head>
+
 <body>
 
-<div class="sidebar">
-    <h3><?= $_SESSION['nama']; ?></h3>
-    <a href="#">Dashboard</a>
-    <a href="#seminar">Seminar Tersedia</a>
-    <a href="#status">Status Pendaftaran</a>
-    <a href="logout.php">Logout</a>
-</div>
-
-<div class="content">
-
-    <div class="header">
-        Dashboard Peserta - Sistem Manajemen Seminar Online
+    <div class="sidebar">
+        <h3><?= $_SESSION['nama']; ?></h3>
+        <a href="#">Dashboard</a>
+        <a href="#seminar">Seminar Tersedia</a>
+        <a href="#status">Status Pendaftaran</a>
+        <a href="logout.php" style="color:red; text-decoration:none; padding:8px 12px; border-radius:8px;
+            transition:0.3s;" onmouseover="this.style.background='red'; this.style.color='white';"
+            onmouseout="this.style.background='transparent'; this.style.color='red';"">Logout</a>
     </div>
 
-    <!-- Seminar Aktif -->
-    <h2 id="seminar">Seminar Tersedia</h2>
+    <div class="content">
 
-    <?php while($row = mysqli_fetch_assoc($seminar)): ?>
-        <div class="card-seminar">
-            <h3><?= $row['judul']; ?></h3>
-            <p><?= $row['deskripsi']; ?></p>
-            <p><b>Tanggal:</b> <?= $row['created_at']; ?></p>
-            <p><b>Metode:</b> <?= strtoupper($row['metode']); ?></p>
-            <a href="daftar.php?id=<?= $row['id']; ?>">
-                <button class="btn">Daftar Seminar</button>
-            </a>
+        <div class="header">
+            Dashboard Peserta - Sistem Manajemen Seminar Online
         </div>
-    <?php endwhile; ?>
 
-    <!-- Status Pendaftaran -->
-    <h2 id="status">Status Pendaftaran Saya</h2>
+        <!-- Seminar Aktif -->
+        <h2 id="seminar">Seminar Tersedia</h2>
 
-    <table>
-        <tr>
-            <th>Judul Seminar</th>
-            <th>Status</th>
-            <th>Kehadiran</th>
-        </tr>
-
-        <?php while($p = mysqli_fetch_assoc($pendaftaran)): ?>
-        <tr>
-            <td><?= $p['judul']; ?></td>
-            <td><?= $p['status']; ?></td>
-            <td><?= $p['kehadiran'] ? $p['kehadiran'] : '-'; ?></td>
-        </tr>
+        <?php while ($row = mysqli_fetch_assoc($seminar)): ?>
+            <div class="card-seminar">
+                <h3><?= $row['judul']; ?></h3>
+                <p><?= $row['deskripsi']; ?></p>
+                <p><b>Tanggal:</b> <?= $row['created_at']; ?></p>
+                <p><b>Metode:</b> <?= strtoupper($row['metode']); ?></p>
+                <a href="daftar.php?id=<?= $row['id']; ?>">
+                    <button class="btn">Daftar Seminar</button>
+                </a>
+            </div>
         <?php endwhile; ?>
 
-    </table>
+        <!-- Status Pendaftaran -->
+        <h2 id="status">Status Pendaftaran Saya</h2>
 
-</div>
+        <table>
+            <tr>
+                <th>Judul Seminar</th>
+                <th>Status</th>
+                <th>Kehadiran</th>
+            </tr>
+
+            <?php while ($p = mysqli_fetch_assoc($pendaftaran)): ?>
+                <tr>
+                    <td><?= $p['judul']; ?></td>
+                    <td><?= $p['status']; ?></td>
+                    <td><?= $p['kehadiran'] ? $p['kehadiran'] : '-'; ?></td>
+                </tr>
+            <?php endwhile; ?>
+
+        </table>
+
+    </div>
 
 </body>
+
 </html>

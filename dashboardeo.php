@@ -174,6 +174,62 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
         tr:hover {
             background-color: #f5f7fb;
         }
+
+        @media (max-width: 1024px) {
+    .main {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .sidebar {
+        left: -250px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        font-size: 12px;
+        min-width: unset;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+
+    button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        font-size: 14px;
+    }
+
+    .burger {
+        font-size: 18px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
     </style>
 </head>
 

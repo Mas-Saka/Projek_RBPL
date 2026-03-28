@@ -270,7 +270,7 @@ $total_feedback = mysqli_fetch_assoc(mysqli_query(
         <a href="#">Undangan Seminar</a>
         <a href="#">Upload Materi</a>
         <a href="#">Lihat Feedback</a>
-        <a href="logout.php" style=" width:;color:red; text-decoration:none; padding:8px 12px; border-radius:8px;
+        <a href="logout.php" style=" width:;color:red;  padding:8px 12px; border-radius:8px;
             transition:0.3s;" onmouseover="this.style.background='red'; this.style.color='white';"
             onmouseout="this.style.background='transparent'; this.style.color='red';" >Logout</a>
     </div>
