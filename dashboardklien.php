@@ -141,7 +141,6 @@ $kontrak_disetujui = mysqli_fetch_assoc(mysqli_query(
         <h3>Klien Panel</h3>
         <a href="#">Dashboard</a>
         <a href="datakontrak.php">Data Kontrak</a>
-        <a href="#">Status Seminar</a>
         <a href="#">Laporan Akhir</a>
         <a href="logout.php">Logout</a>
     </div>

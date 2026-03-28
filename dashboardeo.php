@@ -280,30 +280,41 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
                         <th style="text-align: center;">Aksi</th>
                     </tr>
 
-                    <?php while ($k = mysqli_fetch_assoc($kontrak_list)) { ?>
+                    <?php if (mysqli_num_rows($kontrak_list) > 0) { ?>
+
+                        <?php while ($k = mysqli_fetch_assoc($kontrak_list)) { ?>
+                            <tr>
+                                <td style="max-width:200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                    title="<?= $k['judul_kontrak']; ?>">
+                                    <?= $k['judul_kontrak']; ?>
+                                </td>
+
+                                <td><?= $k['nama_klien']; ?></td>
+                                <td><?= $k['tanggal_buat']; ?></td>
+                                <td>Rp <?= number_format($k['nilai_kontrak']); ?></td>
+
+                                <td>
+                                    <?php if ($k['status_kontrak'] == 'disetujui') { ?>
+                                        <span style="color:green; font-weight:bold;">Disetujui</span>
+                                    <?php } elseif ($k['status_kontrak'] == 'ditolak') { ?>
+                                        <span style="color:red; font-weight:bold;">Ditolak</span>
+                                    <?php } else { ?>
+                                        <span style="color:orange; font-weight:bold;">Menunggu</span>
+                                    <?php } ?>
+                                </td>
+
+                                <td style="text-align: center;">
+                                    <a href="detail_kontrak.php?id=<?= $k['kontrak_id']; ?>">
+                                        <button class="btn-detail">Detail</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php } ?>
+
+                    <?php } else { ?>
                         <tr>
-                            <td style="max-width:200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                                title="<?= $k['judul_kontrak']; ?>">
-                                <?= $k['judul_kontrak']; ?>
-                            </td>
-
-                            <td><?= $k['nama_klien']; ?></td>
-                            <td><?= $k['tanggal_buat']; ?></td>
-                            <td>Rp <?= number_format($k['nilai_kontrak']); ?></td>
-
-                            <td>
-                                <?php if ($k['status_kontrak'] == 'disetujui') { ?>
-                                    <span style="color:green; font-weight:bold;">Disetujui</span>
-                                <?php } elseif ($k['status_kontrak'] == 'ditolak') { ?>
-                                    <span style="color:red; font-weight:bold;">Ditolak</span>
-                                <?php } else { ?>
-                                    <span style="color:orange; font-weight:bold;">Menunggu</span>
-                                <?php } ?>
-                            </td>
-                            <td style="text-align: center;">
-                                <a href="detail_kontrak.php?id=<?= $k['kontrak_id']; ?>">
-                                    <button class="btn-detail">Detail</button>
-                                </a>
+                            <td colspan="6" style="text-align:center; padding:15px;">
+                                Belum ada data kontrak
                             </td>
                         </tr>
                     <?php } ?>

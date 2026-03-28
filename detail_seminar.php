@@ -27,6 +27,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, " SELECT seminar.*, users.nama as
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
+            background : #1e3c72;
         }
 
         .container {
