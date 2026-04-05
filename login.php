@@ -17,7 +17,7 @@ if (isset($_POST['login'])) {
         if ($data['role'] == 'eo') {
             header("Location: dashboardeo.php");
         } elseif ($data['role'] == 'peserta') {
-            header("Location: dashboardpeserta.php");
+            header("Location: index.php");
         } elseif ($data['role'] == 'narasumber') {
             header("Location: dashboardnarasumber.php");
         } elseif ($data['role'] == 'klien') {

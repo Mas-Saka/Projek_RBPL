@@ -344,6 +344,7 @@ $total_diikuti = mysqli_num_rows($pendaftaran);
             <a href="#" class="active">Dashboard</a>
             <a href="#seminar">Jelajahi Seminar</a>
             <a href="#status">Status Saya</a>
+            <a href="index.php">Kembali ke Home</a>
             <a href="logout.php" class="logout-link">Keluar Akun</a>
         </div>
     </div>
@@ -373,12 +374,12 @@ $total_diikuti = mysqli_num_rows($pendaftaran);
             <?php while ($row = mysqli_fetch_assoc($seminar)): ?>
                 <div class="card">
                     <div class="card-body">
-                        <h4><?php echo $row['judul']; ?></h4>
+                        <h4><?php echo $row['judul_seminar']; ?></h4>
                         <p><?php echo $row['deskripsi']; ?></p>
                         <div style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">
                             Tanggal: <?php echo date('d M Y', strtotime($row['created_at'])); ?>
                         </div>
-                        <a href="daftar.php?id=<?php echo $row['id']; ?>" class="btn-daftar">Ikuti Seminar</a>
+                        <a href="daftar.php?id=<?php echo $row['seminar_id']; ?>" class="btn-daftar">Ikuti Seminar</a>
                     </div>
                 </div>
             <?php endwhile; ?>

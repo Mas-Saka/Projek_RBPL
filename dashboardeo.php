@@ -333,7 +333,7 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
         <a href="dashboardeo.php">Dashboard</a>
         <a href="seminar.php">Kelola Seminar</a>
         <a href="buat_kontrak.php">Buat Kontrak</a>
-        <a href="">Data Peserta</a>
+        <a href="data_peserta.php">Data Peserta</a>
         <a href="#">Laporan</a>
         <a href="logout.php" style=" width:;color:red; text-decoration:none; padding:8px 12px; border-radius:8px;
             transition:0.3s;" onmouseover="this.style.background='red'; this.style.color='white';"
