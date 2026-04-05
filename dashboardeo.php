@@ -175,61 +175,151 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
             background-color: #f5f7fb;
         }
 
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            /* efek blur */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-box h3 {
+            margin-bottom: 10px;
+        }
+
+        .modal-box p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .confirm {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .confirm:hover {
+            background: #c0392b;
+        }
+
+        .cancel {
+            background: #ccc;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cancel:hover {
+            background: #999;
+        }
+
         @media (max-width: 1024px) {
-    .main {
-        margin-left: 0;
-        padding: 15px;
-    }
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
 
-    .sidebar {
-        left: -250px;
-    }
+            .sidebar {
+                left: -250px;
+            }
 
-    .stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-@media (max-width: 768px) {
-    .stats {
-        grid-template-columns: 1fr;
-    }
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
 
-    table {
-        font-size: 12px;
-        min-width: unset;
-    }
+            table {
+                font-size: 12px;
+                min-width: unset;
+            }
 
-    th,
-    td {
-        padding: 8px;
-    }
+            th,
+            td {
+                padding: 8px;
+            }
 
-    button {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
-}
+            button {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+        }
 
-@media (max-width: 480px) {
-    .topbar {
-        font-size: 14px;
-    }
+        @media (max-width: 480px) {
+            .topbar {
+                font-size: 14px;
+            }
 
-    .burger {
-        font-size: 18px;
-    }
+            .burger {
+                font-size: 18px;
+            }
 
-    .card {
-        padding: 15px;
-    }
+            .card {
+                padding: 15px;
+            }
 
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-}
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
     </style>
 </head>
 
@@ -360,9 +450,15 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
                                 </td>
 
                                 <td style="text-align: center;">
-                                    <a href="detail_kontrak.php?id=<?= $k['kontrak_id']; ?>">
-                                        <button class="btn-detail">Detail</button>
-                                    </a>
+                                    <div style="display:flex; gap:8px; justify-content:center;">
+                                        <a href="detail_kontrak.php?id=<?= $k['kontrak_id']; ?>">
+                                            <button class="btn-detail">Detail</button>
+                                        </a>
+
+                                        <button class="btn-delete" onclick="openModal(<?= $k['kontrak_id']; ?>)">
+                                            Hapus
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -378,17 +474,47 @@ $nama_eo = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama FROM users WHERE 
                 <br><br>
                 <a href="buat_kontrak.php">
                     <button>+ Buat Kontrak Baru</button>
+                </a>
             </div>
     </div>
+    <div id="modalHapus" class="modal">
+        <div class="modal-box">
+            <span class="close" onclick="closeModal()">&times;</span>
 
+            <h3>Konfirmasi Hapus</h3>
+            <p>Yakin mau hapus kontrak ini?</p>
 
+            <div class="modal-actions">
+                <button class="confirm" onclick="hapusKontrak()">Ya, Hapus</button>
+                <button class="cancel" onclick="closeModal()">Batal</button>
+            </div>
+        </div>
+    </div>
     <script>
         function toggleMenu() {
             document.getElementById("sidebar").classList.toggle("hide");
             document.getElementById("main").classList.toggle("full");
         }
-    </script>
 
+
+        let selectedId = null;
+
+        function openModal(id) {
+            selectedId = id;
+            document.getElementById("modalHapus").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modalHapus").style.display = "none";
+        }
+
+        function hapusKontrak() {
+            if (selectedId) {
+                window.location.href = "hapuskontrak.php?id=" + selectedId;
+            }
+        }
+
+    </script>
 </body>
 
 </html>
