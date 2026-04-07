@@ -289,7 +289,7 @@ $kontrak_disetujui = mysqli_fetch_assoc(mysqli_query(
 
     <div class="sidebar" id="sidebar">
         <h3>Klien Panel</h3>
-        <a href="#">Dashboard</a>
+        <a href="dashboardklien.php">Dashboard</a>
         <a href="datakontrak.php">Data Kontrak</a>
         <a href="#">Laporan Akhir</a>
         <a href="logout.php" style=" width:;color:red; text-decoration:none; padding:8px 12px; border-radius:8px;

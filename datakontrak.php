@@ -22,302 +22,265 @@ $query = mysqli_query($conn, "SELECT kontrak_id, nomor_kontrak, tanggal_buat, ta
 
 <head>
     <title>Data Kontrak</title>
+
     <style>
-       body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-}
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
 
-/* CONTAINER */
-.container {
-    max-width: 1100px;
-    margin: 50px auto;
-    padding: 0 20px;
-}
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
 
-/* HEADER */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    color: white;
-}
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            margin-bottom: 20px;
+        }
 
-.header h2 {
-    margin: 0;
-    font-size: 26px;
-}
+        .back-btn {
+            background: white;
+            color: #1e3c72;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-.subtitle {
-    font-size: 13px;
-    opacity: 0.8;
-    margin-top: 4px;
-}
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
 
-/* BACK BUTTON */
-.back-btn {
-    background: white;
-    color: #1e3c72;
-    padding: 10px 18px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    transition: 0.25s;
-}
+        /* SEARCH */
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
 
-.back-btn:hover {
-    background: #f0f4ff;
-    transform: translateY(-2px);
-}
+        .controls input,
+        .controls select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
 
-/* CARD */
-.card {
-    background: white;
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-    animation: fadeIn 0.5s ease;
-}
+        .controls input {
+            flex: 1;
+        }
 
-/* TABLE WRAPPER */
-.table-wrapper {
-    overflow-x: auto;
-}
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-/* TABLE */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 750px;
-}
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+        }
 
-/* HEADER TABLE */
-thead {
-    background: linear-gradient(135deg, #eef2ff, #f8faff);
-}
+        th {
+            background: #f0f4ff;
+        }
 
-th {
-    padding: 14px;
-    text-align: left;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #444;
-}
+        tr {
+            border-bottom: 1px solid #eee;
+        }
 
-/* ROW */
-td {
-    padding: 14px;
-    font-size: 14px;
-    color: #333;
-}
+        tbody tr:hover {
+            background: #f7f9ff;
+        }
 
-/* BORDER */
-tr {
-    border-bottom: 1px solid #eee;
-}
+        .contract-number {
+            font-weight: bold;
+            color: #2a5298;
+        }
 
-/* HOVER EFFECT */
-tbody tr {
-    transition: 0.2s;
-}
+        .price {
+            color: #16a085;
+            font-weight: bold;
+        }
 
-tbody tr:hover {
-    background: #f5f8ff;
-    transform: scale(1.002);
-}
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: white;
+        }
 
-/* CONTRACT NUMBER */
-.contract-number {
-    font-weight: 600;
-    color: #2a5298;
-}
+        .menunggu {
+            background: orange;
+        }
 
-/* DATE RANGE */
-.date-range {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-}
+        .disetujui {
+            background: green;
+        }
 
-.divider {
-    color: #aaa;
-}
+        .ditolak {
+            background: red;
+        }
 
-/* PRICE */
-.price {
-    font-weight: 600;
-    color: #16a085;
-}
+        .detail-btn {
+            background: #2a5298;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+        }
 
-/* BADGE */
-.badge {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
-    color: white;
-    display: inline-block;
-    letter-spacing: 0.5px;
-}
+        /* MOBILE */
+        @media (max-width: 768px) {
 
-/* STATUS COLORS */
-.menunggu {
-    background: linear-gradient(135deg, #f39c12, #f1c40f);
-}
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
 
-.disetujui {
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-}
+            thead {
+                display: none;
+            }
 
-.ditolak {
-    background: linear-gradient(135deg, #e74c3c, #ff6b6b);
-}
+            tr {
+                background: white;
+                margin-bottom: 15px;
+                padding: 10px;
+                border-radius: 10px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
 
-/* BUTTON */
-.detail-btn {
-    background: linear-gradient(135deg, #2a5298, #1e3c72);
-    color: white;
-    padding: 7px 14px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    transition: 0.25s;
-    display: inline-block;
-}
+            td {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px;
+            }
 
-.detail-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* SCROLLBAR */
-.table-wrapper::-webkit-scrollbar {
-    height: 8px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .back-btn {
-        width: 100%;
-        text-align: center;
-    }
-
-    table {
-        font-size: 12px;
-    }
-
-    th, td {
-        padding: 10px;
-    }
-}
-
-/* EXTRA POLISH */
-tbody tr td:first-chilsd {
-    color: #888;
-    font-size: 13px;
-}
-
-tbody tr td:last-child {
-    min-width: 120px;
-}
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: #555;
+            }
+        }
     </style>
 </head>
 
 <body>
+
     <div class="container">
 
         <div class="header">
-            <div>
-                <h2>Daftar Kontrak</h2>
-                <p class="subtitle">Kelola dan pantau semua kontrak Anda</p>
-            </div>
+            <h2>Daftar Kontrak</h2>
             <a href="dashboardklien.php" class="back-btn">← Dashboard</a>
         </div>
 
         <div class="card">
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nomor Kontrak</th>
-                            <th>Periode</th>
-                            <th>Nilai</th>
-                            <th>Status</th>
-                            <th style="text-align:center;">Aksi</th>
-                        </tr>
-                    </thead>
 
-                    <tbody>
-                        <?php $no = 1;
-                        while ($data = mysqli_fetch_assoc($query)) { ?>
-                            <tr>
-                                <td><?= $no++; ?></td>
+            <!-- SEARCH + FILTER -->
+            <div class="controls">
+                <input type="text" id="searchInput" placeholder="Cari nomor kontrak / status...">
 
-                                <td class="contract-number">
-                                    <?= $data['nomor_kontrak']; ?>
-                                </td>
-
-                                <td>
-                                    <div class="date-range">
-                                        <span><?= $data['tanggal_mulai']; ?></span>
-                                        <span class="divider">→</span>
-                                        <span><?= $data['tanggal_selesai']; ?></span>
-                                    </div>
-                                </td>
-
-                                <td class="price">
-                                    Rp <?= number_format($data['nilai_kontrak'], 0, ',', '.'); ?>
-                                </td>
-
-                                <td>
-                                    <span class="badge <?= $data['status_kontrak']; ?>">
-                                        <?= strtoupper($data['status_kontrak']); ?>
-                                    </span>
-                                </td>
-
-                                <td style="text-align:center;">
-                                    <a href="detail_kontrak.php?id=<?= $data['kontrak_id']; ?>" class="detail-btn">
-                                        Lihat Detail
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <select id="filterStatus">
+                    <option value="">Semua Status</option>
+                    <option value="menunggu">Menunggu</option>
+                    <option value="disetujui">Disetujui</option>
+                    <option value="ditolak">Ditolak</option>
+                </select>
             </div>
+
+            <table id="kontrakTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nomor</th>
+                        <th>Periode</th>
+                        <th>Nilai</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php $no = 1;
+                    while ($data = mysqli_fetch_assoc($query)) { ?>
+                        <tr>
+                            <td data-label="No"><?= $no++; ?></td>
+
+                            <td data-label="Nomor" class="contract-number nomor">
+                                <?= $data['nomor_kontrak']; ?>
+                            </td>
+
+                            <td data-label="Periode">
+                                <?= $data['tanggal_mulai']; ?> → <?= $data['tanggal_selesai']; ?>
+                            </td>
+
+                            <td data-label="Nilai" class="price">
+                                Rp <?= number_format($data['nilai_kontrak'], 0, ',', '.'); ?>
+                            </td>
+
+                            <td data-label="Status">
+                                <span class="badge <?= $data['status_kontrak']; ?> status">
+                                    <?= strtoupper($data['status_kontrak']); ?>
+                                </span>
+                            </td>
+
+                            <td data-label="Aksi">
+                                <a href="detail_kontrak.php?id=<?= $data['kontrak_id']; ?>" class="detail-btn">
+                                    Detail
+                                </a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+
         </div>
 
     </div>
+
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        const filterStatus = document.getElementById("filterStatus");
+        const rows = document.querySelectorAll("#kontrakTable tbody tr");
+
+        function filterTable() {
+            let keyword = searchInput.value.toLowerCase();
+            let selectedStatus = filterStatus.value.toLowerCase();
+
+            rows.forEach(function (row) {
+                let nomor = row.querySelector(".nomor").innerText.toLowerCase();
+                let status = row.querySelector(".status").innerText.toLowerCase();
+
+                let cocokSearch = nomor.includes(keyword) || status.includes(keyword);
+                let cocokFilter = selectedStatus === "" || status.includes(selectedStatus);
+
+                if (cocokSearch && cocokFilter) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        searchInput.addEventListener("keyup", filterTable);
+        filterStatus.addEventListener("change", filterTable);
+    </script>
+
 </body>
 
 </html>

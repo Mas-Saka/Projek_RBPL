@@ -7,8 +7,7 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
         seminar.tanggal,
         seminar.jam_mulai,
         seminar.gambar,
-        users.nama AS narasumber
-    FROM seminar
+        users.nama AS narasumber FROM seminar
     LEFT JOIN users ON seminar.narasumber_id = users.id
     WHERE seminar.status = 'aktif'
     ORDER BY seminar.seminar_id DESC
@@ -175,7 +174,7 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
             visibility: hidden;
             transform: translateY(20px);
             transition: 0.3s;
-
+            z-index: 9999;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
@@ -376,18 +375,7 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
             color: red;
         }
 
-        /* ANIMATION */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
         /* =========================================
            MODAL & BACK TO TOP
@@ -438,13 +426,76 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
         }
 
         /* =========================================
-           FOOTER
-           ========================================= */
+   FOOTER MINIMAL KONTAK
+   ========================================= */
         footer {
             background: #2c3e50;
             color: #fff;
-            padding: 40px 0;
-            text-align: center;
+            padding: 30px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        /* BRAND */
+        .footer-brand h3 {
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .footer-brand p {
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        /* KONTAK */
+        .footer-contact {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-item span {
+            display: block;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 3px;
+        }
+
+        .footer-item p {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-contact {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+
+        /* ANIMATION */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
 
@@ -487,33 +538,6 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
                 }
             }
 
-            @media (max-width: 768px) {
-                .nav-content {
-                    position: absolute;
-                    top: 80px;
-                    right: 0;
-                    background: white;
-                    width: 100%;
-                    flex-direction: column;
-                    display: none;
-                    padding: 20px;
-                }
-
-                .nav-content.active {
-                    display: flex;
-                }
-
-                .nav-menu {
-                    flex-direction: column;
-                    margin: 0;
-                }
-
-                .nav-menu li {
-                    padding: 10px 0;
-                }
-            }
-
-
         }
     </style>
 </head>
@@ -530,7 +554,7 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
                         <li><a href="#hero">Home</a></li>
                         <li><a href="#fitur">Fitur</a></li>
                         <li><a href="#webinar">Webinar</a></li>
-                        <li><a href="#kontak">Kontak</a></li>
+                        
                     </ul>
 
                     <?php if (isset($_SESSION['id'])) { ?>
@@ -583,8 +607,8 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
                 </div>
                 <div class="feature-box reveal">
                     <i class="fas fa-certificate"></i>
-                    <h3>E-Sertifikat</h3>
-                    <p>Sertifikat resmi langsung terbit setelah seminar selesai dilaksanakan.</p>
+                    <h3>Mudah Digunakan</h3>
+                    <p>Antarmuka yang sederhana dan intuitif memudahkan Anda dalam mengakses dan mengikuti seminar.</p>
                 </div>
                 <div class="feature-box reveal">
                     <i class="fas fa-users"></i>
@@ -632,10 +656,34 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
     </section>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2024 SeminarOnline - Sistem Manajemen Seminar Online</p>
+    <div class="container">
+        <div class="footer-content">
+
+            <!-- KIRI -->
+            <div class="footer-brand">
+                <h3>SeminarOnline</h3>
+                <p>&copy; 2026 Sistem Manajemen Seminar Online</p>
+            </div>
+
+            <!-- KANAN (KONTAK MINI) -->
+            <div class="footer-contact">
+                <div class="footer-item">
+                    <span>Email</span>
+                    <p>support@seminaronline.com</p>
+                </div>
+                <div class="footer-item">
+                    <span>Telepon</span>
+                    <p>+62 812 3456 7890</p>
+                </div>
+                <div class="footer-item">
+                    <span>Alamat</span>
+                    <p>Yogyakarta, Indonesia</p>
+                </div>
+            </div>
+
         </div>
-    </footer>
+    </div>
+</footer>
 
     <div id="myModal" class="modal">
         <div class="modal-box">
@@ -655,25 +703,11 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
 
     <script>
         // 1. NAVBAR SCROLL EFFECT
-        window.onscroll = function () {
-            let header = document.getElementById("navbar");
-            let btnTop = document.getElementById("backToTop");
 
-            if (window.pageYOffset > 100) {
-                header.classList.add("active");
-                btnTop.style.display = "flex";
-            } else {
-                header.classList.remove("active");
-                btnTop.style.display = "none";
-            }
-
-            // Trigger Reveal Animation
-            reveal();
-        };
 
         // 2. TYPING EFFECT
         const textElement = document.querySelector(".typing");
-        const words = ["Terbaik", "Interaktif"];
+        const words = ["Terbaik", "Informatif", "Mudah Digunakan"];
         let wordIdx = 0;
         let charIdx = 0;
 
@@ -747,16 +781,46 @@ $acara_seminar = mysqli_query($conn, " SELECT seminar.seminar_id,
         // 6. BACK TO TOP
         const backToTop = document.getElementById("backToTop");
 
-        window.addEventListener("scroll", () => {
-            document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+        window.addEventListener("scroll", function () {
+            let header = document.getElementById("navbar");
 
-            if (window.scrollY > 200) {
+            // navbar effect
+            if (window.scrollY > 50) {
+                header.classList.add("active");
+            } else {
+                header.classList.remove("active");
+            }
+
+            // back to top (muncul kalau scroll agak jauh)
+            if (window.scrollY > 300) {
                 backToTop.classList.add("show");
             } else {
                 backToTop.classList.remove("show");
             }
+
+            reveal();
         });
 
+        backToTop.addEventListener("click", function () {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+
+        //Tombol Burger 
+        const menuIcon = document.querySelector(".menu-icon");
+        const navContent = document.querySelector(".nav-content");
+
+        menuIcon.addEventListener("click", function () {
+            navContent.classList.toggle("active");
+        });
+        // Ketika klik diluar burger tetap tertutup
+        document.addEventListener("click", function (e) {
+            if (!menuIcon.contains(e.target) && !navContent.contains(e.target)) {
+                navContent.classList.remove("active");
+            }
+        });
     </script>
 </body>
 

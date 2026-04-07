@@ -10,7 +10,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] != 'peserta') {
 $peserta_id = $_SESSION['id'];
 
 // Ambil seminar aktif
-$seminar = mysqli_query($conn, "SELECT * FROM seminar WHERE status='aktif'");
+$seminar = mysqli_query($conn, "SELECT * FROM seminar WHERE status='aktif' LIMIT 3");
 $total_seminar = mysqli_num_rows($seminar);
 
 // Ambil pendaftaran peserta
@@ -300,6 +300,21 @@ $total_diikuti = mysqli_num_rows($pendaftaran);
             transform: translateY(0);
         }
 
+        /* ================= DETAIL PAGE ================= */
+        .btn-lihat {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            font-weight: 100;
+            transition: 0.3s;
+            margin-bottom: 30px;
+        }
+
+        .btn-lihat:hover {
+            background: #2980b9;
+        }
         /* ================= MOBILE ================= */
         .menu-btn {
             display: none;
@@ -384,6 +399,10 @@ $total_diikuti = mysqli_num_rows($pendaftaran);
                 </div>
             <?php endwhile; ?>
         </div>
+         <div style="text-align:center; margin-top:30px;">
+                <a href="semua_seminar.php" class="btn-lihat">Lihat Seminar Lainnya</a>
+        </div>
+
 
         <h3 class="section-title" id="status">Status Pendaftaran Saya</h3>
         <div class="table-box">
