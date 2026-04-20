@@ -158,11 +158,10 @@ if (isset($_POST['login'])) {
         .error-msg {
             background: #ffe0e0;
             color: #e74c3c;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
-            font-size: 14px;
-            border-left: 4px solid #e74c3c;
+            font-size: 14px;    
         }
     </style>
 </head>

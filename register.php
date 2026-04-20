@@ -153,13 +153,12 @@ if (isset($_POST['register'])) {
         .alert-error {
             background: #ffe0e0;
             color: #e74c3c;
-            border-color: #e74c3c;
         }
 
         .alert-success {
             background: #e8f5e9;
             color: #2e7d32;
-            border-color: #2e7d32;
+            
         }
 
         .alert-success a {
